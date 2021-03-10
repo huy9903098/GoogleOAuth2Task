@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta
+      name="google-signin-client_id"
+      content="1001991465548-bvrhh3aknkepvk4kmvi5kri1pcd8d9h5.apps.googleusercontent.com"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage</title>
+  </head>
+  <body>
+    <h1>Login Page</h1>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <p id="error" style="display: none"></p>
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+      function onSignIn(googleUser) {
+        var id_token = googleUser.getAuthResponse().id_token;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/login');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function () {
+          if (xhr.responseText == 'success') {
+            signOut();
+            location.assign('/profile');
+          } else {
+            signOut();
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').style.color = 'red';
+            document.getElementById('error').innerHTML =
+              'Error ' + xhr.status + ' : ' + xhr.responseText;
+          }
+        };
+        xhr.send(JSON.stringify({ token: id_token }));
+      }
+    </script>
+    <script>
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+      }
+    </script>
+  </body>
+</html>
