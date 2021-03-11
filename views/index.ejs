@@ -15,7 +15,6 @@
     <h1>Login Page</h1>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <p id="error" style="display: none"></p>
-    <a href="#" onclick="signOut();">Sign out</a>
     <script>
       function onSignIn(googleUser) {
         var id_token = googleUser.getAuthResponse().id_token;
